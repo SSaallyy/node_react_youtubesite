@@ -97,21 +97,15 @@ function UploadVideoPage(props) {
         console.log(files)
         formData.append("file", files[0])
 
-
-        // axios라는 라이브러리를 이용해서 리퀘스트를 서버에 주고받음
         axios.post('/api/video/uploadfiles', formData, config)
             .then(response => {
-
                 if (response.data.success) {
-                    console.log(response.data)
+
                     let variable = {
                         filePath: response.data.filePath,
                         fileName: response.data.fileName
                     }
                     setFilePath(response.data.filePath)
-
-                    //gerenate thumbnail with this filepath ! 
-
                     axios.post('/api/video/thumbnail', variable)
                         .then(response => {
                             if (response.data.success) {
@@ -142,13 +136,13 @@ function UploadVideoPage(props) {
                         onDrop={onDrop}
                         //multiple : true=파일 여러개받기,false=파일 한개받기
                         multiple={false}
-                        maxSize={800000000}>
+                        maxSize={8000000000}>
                         {({ getRootProps, getInputProps }) => (
                             <div style={{ width: '300px', height: '240px', border: '1px solid lightgray', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                 {...getRootProps()}
                             >
                                 <input {...getInputProps()} />
-                                <Icon type="plus" style={{ fontSize: '3rem' }} />
+                                <Icon type="plus" />
 
                             </div>
                         )}
@@ -156,7 +150,7 @@ function UploadVideoPage(props) {
 
                     {Thumbnail !== "" &&
                         <div>
-                            <img src={`http://localhost:5000/${Thumbnail}`} alt="haha" />
+                            <img src={`http://localhost:3000/${Thumbnail}`} alt="haha" />
                         </div>
                     }
                 </div>
