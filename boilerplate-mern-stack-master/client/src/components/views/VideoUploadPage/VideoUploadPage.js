@@ -53,7 +53,8 @@ function UploadVideoPage(props) {
 
     const onSubmit = (event) => {
 
-        event.preventDefault();
+        //웹 브라우저가 기본적으로 처리해주는 기본이벤트를 비활성화
+        event.preventDefault(); 
 
         if (user.userData && !user.userData.isAuth) {
             return alert('Please Log in First')
@@ -79,10 +80,10 @@ function UploadVideoPage(props) {
         axios.post('/api/video/uploadVideo', variables)
             .then(response => {
                 if (response.data.success) {
-                    alert('video Uploaded Successfully')
+                    alert('비디오 업로드 성공')
                     props.history.push('/')
                 } else {
-                    alert('Failed to upload video')
+                    alert('비디오 업로드 실패')
                 }
             })
 
@@ -150,7 +151,7 @@ function UploadVideoPage(props) {
 
                     {Thumbnail !== "" &&
                         <div>
-                            <img src={`http://localhost:3000/${Thumbnail}`} alt="haha" />
+                            <img src={`http://localhost:5000/${Thumbnail}`} alt="thumbnail" />
                         </div>
                     }
                 </div>
