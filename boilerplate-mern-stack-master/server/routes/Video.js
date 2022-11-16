@@ -6,6 +6,7 @@ var ffmpeg = require('fluent-ffmpeg');
 
 const { auth } = require("../middleware/auth");
 const { Video } = require("../models/Video");
+const { Subscriber } = require("../models/Subscriber");
 
 
 var storage = multer.diskStorage({
@@ -72,6 +73,28 @@ router.get("/getVideos", (req, res) => {
         })
 });
 
+router.post("/getSubscriptionVideos", (req, res) => {
+
+    //구독하는 사람들을 찾기
+    Subscriber.find({ 'userFrom': req.body.userFrom })
+              .exec((err,subscriberInfo) => {
+                  if(err) return res.status(400).send(err);
+
+                let subscribedUser = [];
+
+                subscriberInfo.map((subscriber, i )=>{
+                    subscribedUser.push(subscriber.userTo);
+                })            
+
+    //구독한 사람들의 영상을 가져오기
+    Video.find({ writer : { $in: subscribedUser }}) //writer에 여러개를 넣어야할 경우에 몽고디비가 제공하는 기능인 $in을 활용하면됩니다.
+         .populate('writer') //writer에 해당하는 정보 모두를 가져오기위해
+         .exec((err,videos)=>{
+            if(err) return res.status(400).send(err);
+            res.status(200).json({ success: true, videos })
+         })
+    })
+});
 
 router.post("/getVideoDetail", (req, res) => {
 
