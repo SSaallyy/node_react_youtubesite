@@ -37,6 +37,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/video', require('./routes/Video'));
 app.use('/api/subscribe', require('./routes/subscribe'));
 app.use('/api/comments', require('./routes/comments'));
+app.use('/api/like', require('./routes/likedislike'));
 
 
 //use this to show the image you have in node js server to client (react js)
