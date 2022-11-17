@@ -10,6 +10,7 @@ function VideoDetailPage(props) {
 
     const videoId = props.match.params.videoId
     const [Video, setVideo] = useState([])
+    const [Commentlists,setCommentLists] = useState([])
 
     const videoVariable = {
         videoId: videoId
@@ -25,6 +26,16 @@ function VideoDetailPage(props) {
                     alert('비디오 정보 불러오기 실패')
                 }
             })
+
+        axios.post('/api/comments/getComments', videoVariable)
+        .then(response => {
+            if (response.data.success) {
+                console.log('response.data.comments',response.data.comments)
+                setCommentLists(response.data.comments)
+            } else {
+                alert('댓글정보 불러오기 실패')
+            }
+        })
 
     }, [])
 
@@ -50,7 +61,7 @@ function VideoDetailPage(props) {
                             <div></div>
                         </List.Item>
                         {/* comments */}
-                        <Comments postId={videoId}/>
+                        <Comments postId={videoId} commentlists={Commentlists}/>
                     </div>
                 </Col>
                 <Col lg={6} xs={24}>
