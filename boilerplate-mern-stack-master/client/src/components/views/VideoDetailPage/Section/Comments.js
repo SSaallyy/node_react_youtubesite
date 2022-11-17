@@ -3,6 +3,7 @@ import { Button, Input } from 'antd';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import SingleComment from './SingleComment';
+import ReplyComment from './ReplyComment';
 
 const { TextArea } = Input;
 
@@ -23,7 +24,8 @@ function Comments(props) {
         axios.post('/api/comments/saveComment',variables)
              .then(response => {
                 if(response.data.success){
-                    console.log(response.data.result)
+                    setCommentsValue("")
+                    props.refreshFunction(response.data.result)
                 }else{
                     alert("댓글을 등록하지 못했습니다.")
                 }
@@ -42,8 +44,10 @@ function Comments(props) {
             {/* Comment Lists  */}
                 {props.commentlists && props.commentlists.map((comment, index) => (
                     (!comment.responseTo &&
-                        <React.Fragment>
+                        // jsx를 사용하기 때문에 div나 React.Fragment로 감싸줘야지 오류가 안남
+                        <React.Fragment> 
                             <SingleComment comment={comment} postId={props.postId} refreshFunction={props.refreshFunction} />
+                            <ReplyComment parentCommentId={comment._id} postId={props.postId} commentlists={props.commentlists}  refreshFunction={props.refreshFunction}/>
                        </React.Fragment>
                     )
                 ))}

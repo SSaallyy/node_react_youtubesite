@@ -25,21 +25,23 @@ function SingleComment(props) {
         evt.preventDefault();
 
        
-        // const variables = {
-        //     content: CommentsValue,
-        //     writer: user.userData._id,
-        //     postId: props.postId,
-        //     responseTo: props.commentsInfo
-        // }
+        const variables = {
+            writer: user.userData._id,
+            postId: props.postId,
+            responseTo: props.comment._id,
+            content: CommentsValue
+        }
 
-        // axios.post('/api/comments/saveComment',variables)
-        //      .then(response => {
-        //         if(response.data.success){
-        //             console.log(response.data.result)
-        //         }else{
-        //             alert("댓글을 등록하지 못했습니다.")
-        //         }
-        //      })
+        axios.post('/api/comments/saveComment',variables)
+            .then(response => {
+                if (response.data.success) {
+                    setCommentsValue("")
+                    setOpenReply(!OpenReply)
+                    props.refreshFunction(response.data.result)
+                } else {
+                    alert('Failed to save Comment')
+                }
+        })
 
     }
 
